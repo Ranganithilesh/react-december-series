@@ -1,0 +1,19 @@
+// Navbar.js
+import React from 'react';
+
+const Navbar = ({ user, onLogout }) => {
+  return (
+    <div>
+      {user ? (
+        <div>
+          <p>Welcome, {user.email}!</p>
+          <button onClick={onLogout}>Logout</button>
+        </div>
+      ) : (
+        <p>Please login or register</p>
+      )}
+    </div>
+  );
+};
+
+export default Navbar;

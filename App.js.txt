@@ -1,0 +1,103 @@
+// App.js
+import React, { useState } from 'react';
+import Login from './components/Login';
+import Register from './components/Register';
+import Navbar from './components/Navbar';
+import Categories from './components/Categories';
+import ProductList from './components/ProductList';
+import ShoppingCart from './components/ShoppingCart';
+import CheckoutForm from './components/CheckoutForm';
+import OrderSummary from './components/OrderSummary';
+import OrderHistory from './components/OrderHistory';
+import OrderDetails from './components/OrderDetails';
+import SearchBar from './components/SearchBar';
+import Filters from './components/Filters';
+
+const App = () => {
+  const [user, setUser] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [cart, setCart] = useState([]);
+  const [checkoutStep, setCheckoutStep] = useState(1);
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState({ category: 'All', priceRange: '' });
+
+  const categories = ['All', 'Fruits', 'Vegetables', 'Dairy', 'Bakery'];
+
+  const products = [
+    { id: 1, name: 'Apple', description: 'Fresh red apple', price: 1.5, image: 'apple.jpg', category: 'Fruits' },
+    // Add more products with details
+  ];
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
+
+  const handleRegister = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+  };
+
+  const handleSelectCategory = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const handleAddToCart = (productId) => {
+    // Same as before
+  };
+
+  const handleRemoveItem = (productId) => {
+    // Same as before
+  };
+
+  const handleUpdateQuantity = (productId, newQuantity) => {
+    // Same as before
+  };
+
+  const handleCheckout = (orderDetails) => {
+    // Same as before
+  };
+
+  const handleViewOrderDetails = (orderId) => {
+    const order = orderHistory.find((order) => order.id === orderId);
+    setSelectedOrder(order);
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
+  // Apply filters and search to the product list
+  const filteredProducts = products
+    .filter((product) => filters.category === 'All' || product.category === filters.category)
+    .filter((product) => filters.priceRange === '' || parseFloat(product.price) <= parseFloat(filters.priceRange))
+    .filter((product) => searchQuery === '' || product.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  return (
+    <div>
+      <Navbar user={user} onLogout={handleLogout} />
+      <Login onLogin={handleLogin} />
+      <Register onRegister={handleRegister} />
+      <Categories categories={categories} onSelectCategory={handleSelectCategory} />
+      <SearchBar onSearch={handleSearch} />
+      <Filters categories={categories} onFilterChange={handleFilterChange} />
+      <ProductList category={selectedCategory} products={filteredProducts} onAddToCart={handleAddToCart} />
+      {checkoutStep === 1 && <ShoppingCart cart={cart} onRemoveItem={handleRemoveItem} onUpdateQuantity={handleUpdateQuantity} />}
+      {checkoutStep === 2 && <OrderSummary cart={cart} />}
+      {checkoutStep === 3 && <CheckoutForm onCheckout={handleCheckout} />}
+      {checkoutStep < 3 && <button onClick={() => setCheckoutStep((prevStep) => prevStep + 1)}>Next</button>}
+      <OrderHistory orderHistory={orderHistory} onViewOrderDetails={handleViewOrderDetails} />
+      {selectedOrder && <OrderDetails order={selectedOrder} />}
+    </div>
+  );
+};
+
+export default App;

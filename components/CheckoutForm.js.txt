@@ -1,0 +1,34 @@
+// CheckoutForm.js
+import React, { useState } from 'react';
+
+const CheckoutForm = ({ onCheckout }) => {
+  const [shippingAddress, setShippingAddress] = useState('');
+  const [paymentInfo, setPaymentInfo] = useState('');
+
+  const handleCheckout = () => {
+    // Validate and process the order
+    const orderDetails = {
+      shippingAddress,
+      paymentInfo,
+      // Add other relevant details
+    };
+    onCheckout(orderDetails);
+  };
+
+  return (
+    <div>
+      <h2>Checkout</h2>
+      <div>
+        <label>Shipping Address:</label>
+        <input type="text" value={shippingAddress} onChange={(e) => setShippingAddress(e.target.value)} />
+      </div>
+      <div>
+        <label>Payment Information:</label>
+        <input type="text" value={paymentInfo} onChange={(e) => setPaymentInfo(e.target.value)} />
+      </div>
+      <button onClick={handleCheckout}>Place Order</button>
+    </div>
+  );
+};
+
+export default CheckoutForm;

@@ -1,0 +1,40 @@
+// Filters.js
+import React, { useState } from 'react';
+
+const Filters = ({ categories, onFilterChange }) => {
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [priceRange, setPriceRange] = useState('');
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    onFilterChange({ category, priceRange });
+  };
+
+  const handlePriceRangeChange = (e) => {
+    const value = e.target.value;
+    setPriceRange(value);
+    onFilterChange({ category: selectedCategory, priceRange: value });
+  };
+
+  return (
+    <div>
+      <h2>Filters</h2>
+      <div>
+        <label>Category:</label>
+        <select value={selectedCategory} onChange={(e) => handleCategoryChange(e.target.value)}>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label>Price Range:</label>
+        <input type="text" value={priceRange} onChange={handlePriceRangeChange} placeholder="Enter price range..." />
+      </div>
+    </div>
+  );
+};
+
+export default Filters;
